@@ -7,7 +7,9 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 class WebView extends StatefulWidget {
-  const WebView({super.key});
+  const WebView({super.key, required this.url});
+
+  final String url;
 
   @override
   _WebViewState createState() => _WebViewState();
@@ -21,7 +23,7 @@ class _WebViewState extends State<WebView> {
 
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse('https://storktic.com/'))
+      ..loadRequest(Uri.parse(widget.url))
     ..setNavigationDelegate(
       NavigationDelegate(
         onPageFinished: _handleLoad,
