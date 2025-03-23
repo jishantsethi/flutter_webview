@@ -43,21 +43,26 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final MaterialColor colorCustom = MaterialColor(0xFF000000, color);
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.black,
-        iconTheme: const IconThemeData(color: Colors.white),
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.black, // Set status bar color to black
+        statusBarIconBrightness: Brightness.light, // Set icons to be light
+        systemNavigationBarColor: Colors.black, // Set navigation bar color to black
+        systemNavigationBarIconBrightness: Brightness.light, // Set navigation bar icons to be light
       ),
-      body: Center(
-        child: Consumer<BottomNavigatorProvider>(
-          builder: (ctx, item, child) {
-            return FirstView(
-              key: ValueKey(item.selectedIndex), // Unique key to rebuild on tab change.
-              url: item.url,
-            );
-          },
+    );
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+        child: Center(
+          child: Consumer<BottomNavigatorProvider>(
+            builder: (ctx, item, child) {
+              return FirstView(
+                key: ValueKey(item.selectedIndex), // Unique key to rebuild on tab change.
+                url: item.url,
+              );
+            },
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigation(
