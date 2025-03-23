@@ -53,43 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: Consumer<BottomNavigatorProvider>(
           builder: (ctx, item, child) {
-            print("index value is ${item.selectedIndex}");
-            switch (item.selectedIndex) {
-              case 0:
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted) {
-                    setState(() {
-                      url = "https://storktic.com/";
-                    });
-                  }
-                });
-                return FirstView(key: const ValueKey('home'), url: url);
-
-              case 1:
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted) {
-                    setState(() {
-                      url = "https://storktic.com/aboutus.php";
-                    });
-                  }
-                });
-                return FirstView(key: const ValueKey('about'), url: url);
-
-              case 2:
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted) {
-                    setState(() {
-                      url = "https://storktic.com/contact.php";
-                    });
-                  }
-                });
-                return FirstView(key: ValueKey('contact'), url: url);
-
-              default:
-                return FirstView(key: const ValueKey('home'), url: url);
-
-                break;
-            }
+            return FirstView(
+              key: ValueKey(item.selectedIndex), // Unique key to rebuild on tab change.
+              url: item.url,
+            );
           },
         ),
       ),
