@@ -9,7 +9,18 @@ import 'bottom_screens/second_view.dart';
 import 'bottom_screens/third_view.dart';
 
 // ignore: must_be_immutable
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _HomeScreenState();
+  }
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String url = "https://storktic.com/";
+
   Map<int, Color> color = {
     50: const Color.fromRGBO(0, 0, 0, .1),
     100: const Color.fromRGBO(0, 0, 0, .2),
@@ -42,15 +53,40 @@ class HomeScreen extends StatelessWidget {
       body: Center(
         child: Consumer<BottomNavigatorProvider>(
           builder: (ctx, item, child) {
+            print("index value is ${item.selectedIndex}");
             switch (item.selectedIndex) {
-              case 0: return const FirstView(key: ValueKey('home'),url: 'https://storktic.com/');
+              case 0:
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    setState(() {
+                      url = "https://storktic.com/";
+                    });
+                  }
+                });
+                return FirstView(key: const ValueKey('home'), url: url);
 
-              case 1: return FirstView(key: ValueKey('about'),url: 'https://storktic.com/aboutus.php');
+              case 1:
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    setState(() {
+                      url = "https://storktic.com/aboutus.php";
+                    });
+                  }
+                });
+                return FirstView(key: const ValueKey('about'), url: url);
 
-              case 2: return FirstView(key: ValueKey('contact'), url: 'https://storktic.com/contact.php');
+              case 2:
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    setState(() {
+                      url = "https://storktic.com/contact.php";
+                    });
+                  }
+                });
+                return FirstView(key: ValueKey('contact'), url: url);
 
               default:
-                return const FirstView(url: 'https://storktic.com/contact.php');
+                return FirstView(key: const ValueKey('home'), url: url);
 
                 break;
             }
