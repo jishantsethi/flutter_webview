@@ -63,10 +63,13 @@ class BottomNavigatorProvider with ChangeNotifier {
         url = "https://storktic.com/";
         break;
       case 1:
-        url = "https://storktic.com/aboutus.php";
+        url = "https://storktic.com/shop.php";
         break;
       case 2:
-        url = "https://storktic.com/contact.php";
+        url = "https://storktic.com/cart.php";
+        break;
+      case 3:
+        url = "https://storktic.com/my-account.php";
         break;
       default:
         url = "https://storktic.com/";

@@ -36,8 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final arrBottomItems = [
     tabItem('Home', Icons.home),
-    tabItem('About', Icons.category),
-    tabItem('Contact', Icons.favorite),
+    tabItem('Shop', Icons.shop),
+    tabItem('Cart', Icons.shopping_cart),
+    tabItem('My Account', Icons.account_box),
   ];
 
   @override
