@@ -1,14 +1,11 @@
+import 'package:SwooBrothers/webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'app_bottom_navigation.dart';
 import 'bottom_screens/first_view.dart';
-import 'bottom_screens/fourth_view.dart';
-import 'bottom_screens/second_view.dart';
-import 'bottom_screens/third_view.dart';
 
-// ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -20,6 +17,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String url = "https://storktic.com/";
+  // Define a GlobalKey to access the WebViewScreenState
+  final GlobalKey<WebViewState> webViewKey = GlobalKey<WebViewState>();
+
+  // Define a map of GlobalKeys for each tab index
+  final Map<int, GlobalKey<WebViewState>> webViewKeys = {
+    0: GlobalKey<WebViewState>(),
+    1: GlobalKey<WebViewState>(),
+    2: GlobalKey<WebViewState>(),
+    3: GlobalKey<WebViewState>(),
+  };
+
 
   Map<int, Color> color = {
     50: const Color.fromRGBO(0, 0, 0, .1),
@@ -53,17 +61,46 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-        child: Center(
-          child: Consumer<BottomNavigatorProvider>(
-            builder: (ctx, item, child) {
-              return FirstView(
-                key: ValueKey(item.selectedIndex), // Unique key to rebuild on tab change.
-                url: item.url,
-              );
-            },
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
           ),
+          onPressed: () async {
+            // Find the WebViewScreen state
+           // final webViewScreenState = webViewKey.currentState;
+            // Access the WebView's GlobalKey for the current tab
+            final item = Provider.of<BottomNavigatorProvider>(context, listen: false);
+            final webViewScreenState = webViewKeys[item.selectedIndex]?.currentState;
+            // Access the WebViewScreen's state using the GlobalKey
+            print("webViewScreenState is ${webViewScreenState}");
+            if (webViewScreenState != null) {
+              // Call the back navigation logic
+              bool handled = await webViewScreenState.handleBackNavigation();
+              print("webViewScreenState  handled is ${handled}");
+              if (!handled) {
+                SystemNavigator.pop(); // Exit the screen if WebView cannot go back
+              }
+            } else {
+              SystemNavigator.pop(); // Default behavior
+            }
+          },
+        ),
+      ),
+      body: Center(
+        child: Padding(
+          //padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+          padding: EdgeInsets.only(top: 0),
+          child: Consumer<BottomNavigatorProvider>(
+              builder: (ctx, item, child) {
+                return  WebView(
+                  key: webViewKeys[item.selectedIndex], // Unique key to rebuild on tab change.
+                  url: item.url,
+                );
+              },
+            ),
         ),
       ),
       bottomNavigationBar: BottomNavigation(
@@ -74,6 +111,25 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.grey,
         selectedColor: Colors.white,
       ),
+    );
+  }
+}
+
+class BackButtonHandler extends StatelessWidget {
+  final Widget child;
+  const BackButtonHandler({Key? key, required this.child}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        final navigator = Navigator.of(context);
+        if (navigator.canPop()) {
+          navigator.pop();
+          return false;
+        }
+        return true;
+      },
+      child: child,
     );
   }
 }

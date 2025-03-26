@@ -7,20 +7,20 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 class WebView extends StatefulWidget {
-  const WebView({super.key, required this.url});
+
+  const WebView({Key? key, required this.url}) : super(key: key);
 
   final String url;
 
   @override
-  _WebViewState createState() => _WebViewState();
+  WebViewState createState() => WebViewState();
 }
 
-class _WebViewState extends State<WebView> {
+class WebViewState extends State<WebView> {
   late final WebViewController _controller;
   @override
   void initState() {
     super.initState();
-
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(Uri.parse(widget.url))
@@ -30,6 +30,15 @@ class _WebViewState extends State<WebView> {
       ),
     );
     addFileSelectionListener();
+  }
+
+  // Method to handle back navigation
+  Future<bool> handleBackNavigation() async {
+    if (await _controller.canGoBack()) {
+      _controller.goBack();
+      return true; // Back navigation was handled
+    }
+    return false; // No WebView history
   }
 
   void addFileSelectionListener() async {
@@ -64,7 +73,17 @@ class _WebViewState extends State<WebView> {
 
   @override
   Widget build(BuildContext context) {
-    return WebViewWidget(
-        controller: _controller);
+    return WillPopScope(
+      onWillPop: () async {
+        // Check if the WebView can go back
+        if (await _controller.canGoBack()) {
+          // Navigate back in WebView
+          _controller.goBack();
+          return false; // Prevent exiting the app
+        }
+        return true; // Exit the app
+      },
+      child: WebViewWidget(controller: _controller),
+    );
   }
 }
