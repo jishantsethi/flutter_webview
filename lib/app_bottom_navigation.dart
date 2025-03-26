@@ -53,26 +53,26 @@ BottomNavigationBarItem tabItem(String title, IconData icon) {
 
 class BottomNavigatorProvider with ChangeNotifier {
   int selectedIndex = 0;
-  String url = "https://storktic.com/";
+  String url = "https://swoobrothers.store/";
 
   void setSelectedIndex({int selectedBottomOption = 0}) {
     selectedIndex = selectedBottomOption;
-    url = "https://storktic.com/";
+    url = "https://swoobrothers.store/";
     switch (selectedBottomOption) {
       case 0:
-        url = "https://storktic.com/";
+        url = "https://swoobrothers.store/";
         break;
       case 1:
-        url = "https://storktic.com/shop.php";
+        url = "https://swoobrothers.store/shop.php";
         break;
       case 2:
-        url = "https://storktic.com/cart.php";
+        url = "https://swoobrothers.store/cart.php";
         break;
       case 3:
-        url = "https://storktic.com/my-account.php";
+        url = "https://swoobrothers.store/my-account.php";
         break;
       default:
-        url = "https://storktic.com/";
+        url = "https://swoobrothers.store/";
     }
     notifyListeners();
   }
