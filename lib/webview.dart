@@ -67,8 +67,8 @@ class WebViewState extends State<WebView> {
 
 
   void _handleLoad(String value) {
-    setState(() {
-    });
+    // setState(() {
+    // });
   }
 
   @override
